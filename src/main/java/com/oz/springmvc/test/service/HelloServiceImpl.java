@@ -38,5 +38,8 @@ public class HelloServiceImpl implements HelloService {
 	public void setHelloDao(HelloDao helloDao) {
 		this.helloDao = helloDao;
 	}
+	public Hello getHello(Long id) {
+		return helloDao.load(id);
+	}
 
 }

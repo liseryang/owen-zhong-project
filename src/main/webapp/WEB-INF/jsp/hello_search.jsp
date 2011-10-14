@@ -40,9 +40,9 @@
 	<tbody>
 		<c:forEach var="o" items="${page.result}">
 			<tr>
-				<td><c:out value="${o.id}"></c:out></td>
-				<td><c:out value="${o.bookingNo}"></c:out></td>
-				<td><a href="delete.html?id=<c:out value="${o.id}"></c:out>"><fmt:message key="label.delete" /></a></td>
+				<td>${o.id}</td>
+				<td><a target="_blank" href="view/${o.id}.html">${o.bookingNo}</a></td>
+				<td><a href="delete.html?id=${o.id}"><fmt:message key="label.delete" /></a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

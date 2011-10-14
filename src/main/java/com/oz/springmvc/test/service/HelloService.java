@@ -12,6 +12,8 @@ public interface HelloService {
 	public void saveHello(Hello hello);
 	
 	public void deleteHello(Long id);
+	
+	public Hello getHello(Long id);
 
 	@SuppressWarnings("unchecked")
 	public Page<Hello> searchHello(Page<Hello> page, Map conditions);

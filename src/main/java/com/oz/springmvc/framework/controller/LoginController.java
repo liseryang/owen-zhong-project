@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
@@ -14,6 +14,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.oz.springmvc.framework.domain.User;
 
+@Controller
 public class LoginController extends SimpleFormController{
 	private Logger log = Logger.getLogger(LoginController.class);
 	 protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
