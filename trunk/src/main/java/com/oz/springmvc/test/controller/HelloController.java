@@ -1,13 +1,13 @@
 package com.oz.springmvc.test.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -16,7 +16,9 @@ import com.oz.springmvc.test.domain.Hello;
 import com.oz.springmvc.test.service.HelloService;
 import com.oz.springmvc.util.ServletUtils;
 
-@Component("hello")
+
+@Controller
+@RequestMapping("hello")
 public class HelloController extends MultiActionController{
 	private HelloService helloService;
 	@Autowired
@@ -24,24 +26,26 @@ public class HelloController extends MultiActionController{
 		this.helloService = helloService;
 	}
 
+	@RequestMapping("list.html")
 	public ModelAndView list(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws Exception {
 		// return new ModelAndView("jsonView","list",helloService.getData());
 		return new ModelAndView("hello_list", "list", helloService.getData());
 	}
-	
+	@RequestMapping("export.html")
 	public ModelAndView export(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws Exception {
 		return new ModelAndView("helloExcelView", "list", helloService.getData());
 	}
+	@RequestMapping("print.html")
 	public ModelAndView print(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws Exception {
 		return new ModelAndView("hello-print");
 	}
-	
+	@RequestMapping("delete.html")
 	public ModelAndView delete(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws Exception {
@@ -52,6 +56,7 @@ public class HelloController extends MultiActionController{
 		modelAndView.addObject("url", "search.html");	
 		return modelAndView;
 	}
+	@RequestMapping("add.html")
 	public ModelAndView add(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse,Hello hello) throws Exception {
@@ -59,10 +64,11 @@ public class HelloController extends MultiActionController{
 //		return new ModelAndView(new RedirectView("/login.htm",true));
 		return new ModelAndView("redirect:search.html");//list.htm
 	}
+	@RequestMapping("search.html")
 	public ModelAndView search(
 			HttpServletRequest paramHttpServletRequest,
 			HttpServletResponse paramHttpServletResponse) throws Exception {
-		Page<Hello> page = new Page<Hello>(5);
+		Page<Hello> page = new Page<Hello>(Page.DEFAULT_PAGE_NO);
 		if(paramHttpServletRequest.getParameter("page.pageNo")!=null){
 			Integer pageNo = Integer.valueOf( paramHttpServletRequest.getParameter("page.pageNo"));
 			page.setPageNo(pageNo);
