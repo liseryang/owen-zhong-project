@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -21,6 +23,8 @@ public class HelloDaoImpl extends JDBCDao implements HelloDao {
 	private final String UPDATE_SQL = "update tb_booking(VR_BKG_BOOKING_NO) values(:bookingNo)";
 	private final String DELETE_SQL = "delete from tb_booking where ID_BOOKING=?";
 	private final String LOAD_BY_ID_SQL = "select ID_BOOKING,VR_BKG_BOOKING_NO from tb_booking where ID_BOOKING=?";
+	private final String LOAD_ALL_SQL = "select ID_BOOKING,VR_BKG_BOOKING_NO from tb_booking";
+	
 	
 	private static class HelloMapper implements RowMapper<Hello> {
 		public Hello mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -32,7 +36,7 @@ public class HelloDaoImpl extends JDBCDao implements HelloDao {
 	}
 	
 	public List<Hello> loadAll(){
-		return getSimpleJdbcTemplate().query("select ID_BOOKING,VR_BKG_BOOKING_NO from tb_booking", new HelloMapper());
+		return getSimpleJdbcTemplate().query(LOAD_ALL_SQL, new HelloMapper());
 	}
 
 	public Hello save(Hello hello) {
@@ -53,16 +57,22 @@ public class HelloDaoImpl extends JDBCDao implements HelloDao {
 		getSimpleJdbcTemplate().update(UPDATE_SQL, new BeanPropertySqlParameterSource(hello));
 	}
 	@SuppressWarnings("unchecked")
-	public Page<Hello> loadPageByCondtion(Page<Hello> page,Map conditions){;
-		conditions.put("start", page.getStart());
-		conditions.put("limit", page.getPageSize());
-		
-		String sql = "select ID_BOOKING,VR_BKG_BOOKING_NO from tb_booking limit :start, :limit";
-		List<Hello> list = getSimpleJdbcTemplate().query(sql, new HelloMapper(), conditions);
+	public Page<Hello> loadPageByCondtion(Page<Hello> page,Map conditions){
+		MapSqlParameterSource sqlParameter = new MapSqlParameterSource();
+		sqlParameter.addValue("start", page.getStart());
+		sqlParameter.addValue("limit", page.getPageSize());
+	
+		StringBuffer whereSb = new StringBuffer("where 1=1 ");
+		if(conditions.get("bookingNo")!=null && StringUtils.isNotBlank((String) conditions.get("bookingNo"))){
+			whereSb.append("and  VR_BKG_BOOKING_NO like :bookingNo ");
+			sqlParameter.addValue("bookingNo", "%"+conditions.get("bookingNo")+"%");
+		}
+		StringBuffer sql = new StringBuffer("select ID_BOOKING,VR_BKG_BOOKING_NO from tb_booking ");
+		sql.append(whereSb.toString()).append(" limit :start, :limit");
+		List<Hello> list = getSimpleJdbcTemplate().query(sql.toString(), new HelloMapper(), sqlParameter);
 		page.setResult(list);
-		
-		String sqlCount = "select count(*) from tb_booking";// where ID_BOOKING=:bookingNo
-		long count = getSimpleJdbcTemplate().queryForLong(sqlCount,conditions);
+		StringBuffer sqlCount = new StringBuffer("select count(*) from tb_booking ").append(whereSb.toString());// where VR_BKG_BOOKING_NO=:bookingNo
+		long count = getSimpleJdbcTemplate().queryForLong(sqlCount.toString(),sqlParameter);
 		page.setTotalCount(count);
 		return page;
 	}

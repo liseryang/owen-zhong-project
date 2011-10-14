@@ -49,7 +49,7 @@ public class HelloController extends MultiActionController{
 		helloService.deleteHello(id);
 		ModelAndView modelAndView = new ModelAndView("message");
 		modelAndView.addObject("message", "msg.deletesuccess");
-		modelAndView.addObject("url", "search.htm");	
+		modelAndView.addObject("url", "search.html");	
 		return modelAndView;
 	}
 	public ModelAndView add(
@@ -57,7 +57,7 @@ public class HelloController extends MultiActionController{
 			HttpServletResponse paramHttpServletResponse,Hello hello) throws Exception {
 		helloService.saveHello(hello);
 //		return new ModelAndView(new RedirectView("/login.htm",true));
-		return new ModelAndView("redirect:search.htm");//list.htm
+		return new ModelAndView("redirect:search.html");//list.htm
 	}
 	public ModelAndView search(
 			HttpServletRequest paramHttpServletRequest,
@@ -67,8 +67,10 @@ public class HelloController extends MultiActionController{
 			Integer pageNo = Integer.valueOf( paramHttpServletRequest.getParameter("page.pageNo"));
 			page.setPageNo(pageNo);
 		}
-		Map<String, Object> conditions = ServletUtils.getParametersStartingWith(paramHttpServletRequest, "page");
+		Map<String, Object> conditions = ServletUtils.getParametersStartingWith(paramHttpServletRequest, "conditions.");
 		page = helloService.searchHello(page, conditions);
-		return new ModelAndView("hello_search", "page", page);
+		ModelAndView modelAndView = new ModelAndView("hello_search", "page", page);
+		modelAndView.addObject("conditions", conditions);
+		return modelAndView;
 	}
 }

@@ -10,19 +10,25 @@
 </head>
 <body>
 <div style="margin:0 auto;width: 850px;">
-<form action="add.htm" method="post">
+<form action="add.html" method="post">
 <input name="bookingNo" type="text"></input> 
 <input type="submit" value="<fmt:message key="label.add"></fmt:message>"></input>
 </form>
 <fmt:message key="label.searchResult"></fmt:message>:
 <br />
+<div><a href="add.html" target="_blank">Add</a></div>
+<div><a href="export.html" target="_blank">Export</a></div>
+<div><a href="javascript:void(0);" onclick="window.open('print.html');">Print</a></div>
 
-<div><a href="export.htm" target="_blank">Export</a></div>
-<div><a href="javascript:void(0);" onclick="window.open('print.htm');">Print</a></div>
-<form id="mainForm" action="search.htm" method="get">
+<form id="mainForm" action="search.html" method="get">
+<div>
+<input value="${conditions.bookingNo}" name="conditions.bookingNo" type="text"></input> 
+<input type="submit" value="查询"></input>
+</div>
 		<input type="hidden" name="page.pageNo" id="pageNo" value="${page.pageNo}"/>
 		<input type="hidden" name="page.orderBy" id="orderBy" value="${page.orderBy}"/>
 		<input type="hidden" name="page.order" id="order" value="${page.order}"/>
+
 <table width="100%" border="1" style="border-collapse: collapse;text-align : center;">
 	<thead>
 		<tr>
@@ -36,7 +42,7 @@
 			<tr>
 				<td><c:out value="${o.id}"></c:out></td>
 				<td><c:out value="${o.bookingNo}"></c:out></td>
-				<td><a href="delete.htm?id=<c:out value="${o.id}"></c:out>"><fmt:message key="label.delete" /></a></td>
+				<td><a href="delete.html?id=<c:out value="${o.id}"></c:out>"><fmt:message key="label.delete" /></a></td>
 			</tr>
 		</c:forEach>
 	</tbody>
