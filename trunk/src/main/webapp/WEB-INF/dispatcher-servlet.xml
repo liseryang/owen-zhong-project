@@ -99,10 +99,10 @@
 	</bean>
 	
 	
-	<bean name="/login.htm" class="com.oz.springmvc.framework.controller.LoginController">
+	<bean name="/login.html" class="com.oz.springmvc.framework.controller.LoginController">
 		<property name="sessionForm" value="true"/>
 		<property name="commandClass" value="com.oz.springmvc.framework.domain.User"/>
-		<property name="successView" value="hello/search.htm"/>
+		<property name="successView" value="hello/search.html"/>
 	</bean>
 	
 </beans>

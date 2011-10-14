@@ -8,7 +8,7 @@
 <title>Login</title>
 </head>
 <body>
-<form action="login.htm" method="post">
+<form action="login.html" method="post">
 <input name="name" />
 <input name="pw" />
 <input type="submit" />
