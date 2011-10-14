@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	
+	
+	<context:component-scan base-package="com.oz"></context:component-scan>
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	</bean>
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+		
+	</bean>
+	
+	
+	<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="authorization"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="controllerClassNameHandlerMapping" class="com.oz.springmvc.framework.handlermapping.ControllerClassNameHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="authorization"/>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="authorization" class="com.oz.springmvc.framework.Authorization"/>
+	
+	
+	<!--	
+			<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
+				<property name="interceptors">
+					<list>
+						<ref bean="authorization"/>
+					</list>
+				</property>
+			</bean>
+
+		<bean id="defaultHandlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+			<property name="interceptors">
+				<list>
+					<ref bean="authorization"/>
+				</list>
+			</property>
+		</bean>
+		<bean id="authorization" class="com.oz.springmvc.framework.Authorization"/>
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+		
+	</bean>
+	
+	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+		<property name="suffix" value=".ftl"/>
+		<property name="contentType" value="text/html; charset=UTF-8" /> 
+	</bean>
+	
+	
+			<property name="prefix" value="/WEB-INF/freemark/"/>
+
+			-->
+	
+	<bean id="freemarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="WEB-INF/freemark/"/>
+		<property name="freemarkerSettings"> 
+			<props> 
+				<prop key="template_update_delay">1</prop> 
+				<prop key="defaultEncoding">UTF-8</prop> 
+				<prop key="url_escaping_charset">UTF-8</prop> 
+				<prop key="locale">zh_CN</prop> 
+				<prop key="boolean_format">true,false</prop> 
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop> 
+				<prop key="date_format">yyyy-MM-dd</prop> 
+				<prop key="time_format">HH:mm:ss</prop> 
+				<prop key="number_format">0.######</prop> 
+				<prop key="whitespace_stripping">true</prop> 
+			</props> 
+		</property>
+	</bean>
+	
+	<bean id="jsonView" class="com.oz.springmvc.framework.view.JsonView">
+	</bean>
+	
+	
+	<bean name="/login.htm" class="com.oz.springmvc.framework.controller.LoginController">
+		<property name="sessionForm" value="true"/>
+		<property name="commandClass" value="com.oz.springmvc.framework.domain.User"/>
+		<property name="successView" value="hello/search.htm"/>
+	</bean>
+	
+</beans>
