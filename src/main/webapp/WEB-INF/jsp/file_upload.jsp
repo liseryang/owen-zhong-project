@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>File Upload</title>
 </head>
 <body>
-<c:out value="${hello.bookingNo}"></c:out>
+<h1>Please upload a file</h1>
+<form method="post" action="file_upload.html" enctype="multipart/form-data">
+<input type="file" name="file"/>
+<input type="submit"/>
+</form>
 </body>
 </html>

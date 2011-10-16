@@ -6,25 +6,27 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.WebUtils;
 
 import com.oz.springmvc.framework.domain.User;
 
 @Controller
-public class LoginController extends SimpleFormController{
+public class LoginController {
 	private Logger log = Logger.getLogger(LoginController.class);
-	 protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
+	@RequestMapping("/login.html")
+	 protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, User user )
 	    throws Exception{
-		User user = (User) command;
 		if(StringUtils.isNotBlank(user.getName())&&StringUtils.isNotBlank(user.getPw())){
 			log.info("name : "+user.getName()+",password:"+user.getPw());
 			WebUtils.setSessionAttribute(request, "user", user);
 			return new ModelAndView(new RedirectView(getSuccessView()));
 		}
 		return new ModelAndView("login");
+	}
+	private String getSuccessView() {
+		return "hello/search.html";
 	}
 }

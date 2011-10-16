@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -18,7 +22,7 @@ import com.oz.springmvc.util.ServletUtils;
 
 
 @Controller
-@RequestMapping("hello")
+@RequestMapping("/hello")
 public class HelloController extends MultiActionController{
 	private HelloService helloService;
 	@Autowired
@@ -27,42 +31,30 @@ public class HelloController extends MultiActionController{
 	}
 
 	@RequestMapping("list.html")
-	public ModelAndView list(
-			HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
-		// return new ModelAndView("jsonView","list",helloService.getData());
+	public ModelAndView list() throws Exception {
 		return new ModelAndView("hello_list", "list", helloService.getData());
 	}
 	@RequestMapping("export.html")
-	public ModelAndView export(
-			HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	public ModelAndView export() throws Exception {
 		return new ModelAndView("helloExcelView", "list", helloService.getData());
 	}
 	@RequestMapping("print.html")
-	public ModelAndView print(
-			HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
+	public ModelAndView print() throws Exception {
 		return new ModelAndView("hello-print");
 	}
 	@RequestMapping("delete.html")
-	public ModelAndView delete(
-			HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse) throws Exception {
-		Long id = Long.valueOf(paramHttpServletRequest.getParameter("id"));
+	public ModelAndView delete(@RequestParam Long id) throws Exception {
 		helloService.deleteHello(id);
 		ModelAndView modelAndView = new ModelAndView("message");
 		modelAndView.addObject("message", "msg.deletesuccess");
 		modelAndView.addObject("url", "search.html");	
 		return modelAndView;
 	}
+	
 	@RequestMapping("add.html")
-	public ModelAndView add(
-			HttpServletRequest paramHttpServletRequest,
-			HttpServletResponse paramHttpServletResponse,Hello hello) throws Exception {
+	public String add(Hello hello){
 		helloService.saveHello(hello);
-//		return new ModelAndView(new RedirectView("/login.htm",true));
-		return new ModelAndView("redirect:search.html");//list.htm
+		return "redirect:search.html";
 	}
 	@RequestMapping("search.html")
 	public ModelAndView search(
