@@ -48,12 +48,18 @@
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages"/>
 	</bean>
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	
+	<!-- 使用AOP定义事务 -->
+	<!--
 	<tx:advice id="txAdvice">
 		<tx:attributes>
 			<tx:method name="*"></tx:method>
 		</tx:attributes>
 	</tx:advice>
 	<aop:config>
-		<aop:advisor pointcut="execution(* com.oz.service..*.*(..))" advice-ref="txAdvice"></aop:advisor>
+		<aop:advisor pointcut="execution(* com.oz..*service..*(..))" advice-ref="txAdvice"></aop:advisor>
 	</aop:config>
+	-->
 </beans>

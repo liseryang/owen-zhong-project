@@ -25,7 +25,7 @@ public class Authorization extends HandlerInterceptorAdapter {
 		logger.debug(lookupPath);
 		Object user = WebUtils.getSessionAttribute(request, "user");
 		logger.debug(user);
-		if (user == null && !"/login.html".equals(lookupPath)) {
+		if (user == null && !"/login.html".equals(lookupPath)&&lookupPath.startsWith("/hello")) {
 			ModelAndView modelAndView = new ModelAndView(new RedirectView("/login.html",true));
 			throw new ModelAndViewDefiningException(modelAndView);
 		}
